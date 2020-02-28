@@ -122,7 +122,9 @@ float CurrentCutOff = 4;                      //maximum Current setting allowed 
 float ResistorCutOff = 999;                   //maximum Resistor we want to deal with in software
 float BatteryCurrent;                         //
 float LoadCurrent;                            //
-float LVC = 0;
+float LVC = 6;                                // 18650 battery cutoff voltage
+float LVC_hysteresis = 1;
+uint8_t hysteresis_state = 0;
 
 // ON/OFF
 boolean toggle = false;                       //used for toggle of Load On/Off button
@@ -855,23 +857,32 @@ void maxConstantCurrentSetting (void) {
 void LoadSwitch(void) {
 
    delay(100);                                          //simple delay for key debounce (commented out if not required)
-  if(ActualVoltage <= 8.0) { //code edit
-    lcd.setCursor(8,0);
-    lcd.print("LVC");
-    //Load = 1;
-    toggle = false;
+  
+  if (ActualVoltage < LVC) {
+    hysteresis_state = 0;
+  } else if (ActualVoltage > (LVC + LVC_hysteresis)){
+    hysteresis_state = 1;
   }
-  else if (digitalRead(PIN_LOAD_ON_OFF) == LOW) {
-    lcd.setCursor(8,0);
-    lcd.print("On  ");
-    lcd.setCursor(0,3);
-    lcd.print("                    ");                 //clear bottom line of LCD
-    //Load = 0;
-    toggle = true;        
-  }
+  
+  if (hysteresis_state) {
+    if (digitalRead(PIN_LOAD_ON_OFF) == LOW ) {
+      lcd.setCursor(8,0);
+      lcd.print("On  ");
+      lcd.setCursor(0,3);
+      lcd.print("                    ");                 //clear bottom line of LCD
+      //Load = 0;
+      toggle = true;        
+    }
+  else{
+      lcd.setCursor(8,0);
+      lcd.print("Off ");
+      //Load = 1;
+      toggle = false;
+    }
+  } 
   else{
     lcd.setCursor(8,0);
-    lcd.print("Off ");
+    lcd.print("LVC ");
     //Load = 1;
     toggle = false;
   }
