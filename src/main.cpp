@@ -855,7 +855,7 @@ void maxConstantCurrentSetting (void) {
 void LoadSwitch(void) {
 
    delay(100);                                          //simple delay for key debounce (commented out if not required)
-  if(ActualVoltage <= 8.0) {
+  if(ActualVoltage <= 8.0) { //code edit
     lcd.setCursor(8,0);
     lcd.print("LVC");
     //Load = 1;
