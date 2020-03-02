@@ -128,7 +128,7 @@ uint8_t hysteresis_state = 0;
 
 // ON/OFF
 boolean toggle = false;                       //used for toggle of Load On/Off button
-#define PIN_LOAD_ON_OFF 15                   //analog pin A1 used as a digital pin to set Load ON/OFF
+#define PIN_LOAD_ON_OFF A1                   //analog pin A1 used as a digital pin to set Load ON/OFF
 
 // ADC
 void readVoltageCurrent (void);
