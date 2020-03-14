@@ -150,9 +150,9 @@ void inputValue (void);
 void userSetUp (void);
 
 // temp
-void temperatureCutOff (void);
-void getTemp();
-void fanControl (void);
+//void temperatureCutOff (void);
+//void getTemp();
+//void fanControl (void);
 void LoadSwitch();
 
 
@@ -216,7 +216,7 @@ void loop() {
   lcd.setCursor(18,3);                                   //sets display of Mode indicator at bottom right of LCD
   lcd.print(Mode);                                       //display mode selected on LCD (CC, CP, CR or BC)
   
-  temperatureCutOff();                                   //check if Maximum Temperature is exceeded
+  //temperatureCutOff();                                   //check if Maximum Temperature is exceeded
 
   if(Mode != "TC" && Mode != "TP" && Mode != "TT"){      //if NOT transient mode then Normal Operation
     // reading = encoderPosition/1000;                        //read input from rotary encoder 
@@ -231,7 +231,7 @@ void loop() {
   dacControl();
   dacControlVoltage();                                   //sets the drive voltage to control the MOSFET
 
-  fanControl();                                          //call heatsink fan control
+ // fanControl();                                          //call heatsink fan control
 
 }
 
@@ -669,6 +669,7 @@ void displayEncoderReading (void) {
     //lcd.cursor();                                            //show cursor on LCD
 }
 //c_temp.ino
+/*
 void temperatureCutOff (void){
 
   getTemp(); // retrieve the temperature
@@ -699,8 +700,8 @@ void getTemp(){
   }
 
 }
-
-
+*/
+/*
 //-----------------------Fan Control----------------------------------------------------------
 void fanControl (void) {
 
@@ -720,6 +721,7 @@ void fanControl (void) {
       //analogWrite(PIN_FAN, fanSpeed);
   }
 
+*/
 /*
   if (temp >= 32  && temp < 40 ) {                     //Below 40 we run fan fixed at minimum
       fanSpeed = 131;
@@ -741,7 +743,7 @@ void fanControl (void) {
       fanSpeed = 255;
       digitalWrite(PIN_FAN, HIGH);
   }
-*/
+
   lcd.setCursor(16,0);
   lcd.print(temp);
   lcd.print((char)0xDF);
@@ -749,8 +751,10 @@ void fanControl (void) {
 
   //Serial.print("Fan Speed ");                      //used for testing only
   //Serial.println(fanSpeed);                        //used for testing only
-  
 }
+  */
+
+
 //d_ctrl.ino
 //-----------------------Select Constant Current LCD set up--------------------------------
 void Current(void) {
