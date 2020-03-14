@@ -1,4 +1,5 @@
   // Libraries
+#include <Arduino.h>
 #include <Wire.h>                             // include I2C library
 #include <MCP79410_Timer.h>                   // Scullcom Hobby Electronics library  http://www.scullcom.com/MCP79410Timer-master.zip
 #include <Adafruit_MCP4725.h>                 // Adafruit DAC library  https://github.com/adafruit/Adafruit_MCP4725
@@ -157,9 +158,9 @@ void inputValue (void);
 void userSetUp (void);
 
 // temp
-void temperatureCutOff (void);
-void getTemp();
-void fanControl (void);
+//void temperatureCutOff (void);
+//void getTemp();
+//void fanControl (void);
 void LoadSwitch();
 
 
@@ -235,6 +236,9 @@ void setup() {
     OpenLogFile.println("--------------STARTING NEW SESSION--------------");
     OpenLogFile.println("Voltage, Current, Power, Temperature, Time");
     OpenLogFile.close();
+
+  setPower = 5;
+  reading = 5;
   }
 
   Wire.begin();                                            //join i2c bus (address optional for master)
@@ -263,7 +267,7 @@ void setup() {
 
   lcd.setCursor(8,0);
   lcd.print("OFF");                                        //indicate that LOAD is off at start up
-  Current();                                               //sets initial mode to be CC (Constant Current) at Power Up
+  Power();                                               //sets initial mode to be CP (Constant Current) at Power Up
 
   customKey = customKeypad.getKey();
 
@@ -278,8 +282,8 @@ void loop() {
 
   lcd.setCursor(18,3);                                   //sets display of Mode indicator at bottom right of LCD
   lcd.print(Mode);                                       //display mode selected on LCD (CC, CP, CR or BC)
-
-  temperatureCutOff();                                   //check if Maximum Temperature is exceeded
+  
+  //temperatureCutOff();                                   //check if Maximum Temperature is exceeded
 
   if(Mode != "TC" && Mode != "TP" && Mode != "TT"){      //if NOT transient mode then Normal Operation
     // reading = encoderPosition/1000;                        //read input from rotary encoder
@@ -313,7 +317,7 @@ void loop() {
   dacControl();
   dacControlVoltage();                                   //sets the drive voltage to control the MOSFET
 
-  fanControl();                                          //call heatsink fan control
+ // fanControl();                                          //call heatsink fan control
 
 }
 
@@ -751,6 +755,7 @@ void displayEncoderReading (void) {
     //lcd.cursor();                                            //show cursor on LCD
 }
 //c_temp.ino
+/*
 void temperatureCutOff (void){
 
   getTemp(); // retrieve the temperature
@@ -781,8 +786,8 @@ void getTemp(){
   }
 
 }
-
-
+*/
+/*
 //-----------------------Fan Control----------------------------------------------------------
 void fanControl (void) {
 
@@ -802,6 +807,7 @@ void fanControl (void) {
       //analogWrite(PIN_FAN, fanSpeed);
   }
 
+*/
 /*
   if (temp >= 32  && temp < 40 ) {                     //Below 40 we run fan fixed at minimum
       fanSpeed = 131;
@@ -823,7 +829,7 @@ void fanControl (void) {
       fanSpeed = 255;
       digitalWrite(PIN_FAN, HIGH);
   }
-*/
+
   lcd.setCursor(16,0);
   lcd.print(temp);
   lcd.print((char)0xDF);
@@ -831,8 +837,14 @@ void fanControl (void) {
 
   //Serial.print("Fan Speed ");                      //used for testing only
   //Serial.println(fanSpeed);                        //used for testing only
+<<<<<<< HEAD
+=======
 
+>>>>>>> b727321394a300a5b5d715189eb6c8fe30be706e
 }
+  */
+
+
 //d_ctrl.ino
 //-----------------------Select Constant Current LCD set up--------------------------------
 void Current(void) {
@@ -865,7 +877,8 @@ void Power(void) {
   lcd.setCursor(0,2);
   lcd.print("Set W = ");
   lcd.setCursor(16,2);
-  lcd.print("    ");
+  lcd.print("    "
+  );
   lcd.setCursor(14,2);
   lcd.print("W");
   lcd.setCursor(0,3);                                   //clear last line of time info
