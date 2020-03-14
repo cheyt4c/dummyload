@@ -1,0 +1,47 @@
+-I/Users/Raj_mactop/Desktop/etc/BLUEsat/balloon/battery_test/software/dummyload/include
+-I/Users/Raj_mactop/Desktop/etc/BLUEsat/balloon/battery_test/software/dummyload/src
+-I/Users/Raj_mactop/Desktop/etc/BLUEsat/balloon/battery_test/software/dummyload/lib/NewliquidCrystal/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/SD/src
+-I/Users/Raj_mactop/Desktop/etc/BLUEsat/balloon/battery_test/software/dummyload/lib/MCP79410Timer-master/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/SPI/src
+-I/Users/Raj_mactop/.platformio/lib/DHT sensor library_ID19
+-I/Users/Raj_mactop/.platformio/lib/Adafruit Unified Sensor_ID31
+-I/Users/Raj_mactop/Desktop/etc/BLUEsat/balloon/battery_test/software/dummyload/.pio/libdeps/nanoatmega328/Keypad_ID165/src
+-I/Users/Raj_mactop/Desktop/etc/BLUEsat/balloon/battery_test/software/dummyload/.pio/libdeps/nanoatmega328/MCP342x_ID787/src
+-I/Users/Raj_mactop/Desktop/etc/BLUEsat/balloon/battery_test/software/dummyload/.pio/libdeps/nanoatmega328/Adafruit MCP4725_ID677
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/Wire/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/cores/arduino
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/variants/mega
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/EEPROM/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/HID/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/__cores__/arduino/SoftwareSerial/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Adafruit_CircuitPlayground
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Adafruit_CircuitPlayground/utility
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Bridge/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Esplora/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Ethernet/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Firmata
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Firmata/utility
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/GSM/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Keyboard/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/LiquidCrystal/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Mouse/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/RobotIRremote/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Robot_Control/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Robot_Motor/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Servo/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/SpacebrewYun/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Stepper/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/TFT/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/Temboo/src
+-I/Users/Raj_mactop/.platformio/packages/framework-arduinoavr/libraries/WiFi/src
+-I/Users/Raj_mactop/.platformio/packages/toolchain-atmelavr/avr/include
+-I/Users/Raj_mactop/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include
+-I/Users/Raj_mactop/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include-fixed
+-I/Users/Raj_mactop/.platformio/packages/tool-unity
+-DPLATFORMIO=40201
+-DARDUINO_AVR_MEGA2560
+-DF_CPU=16000000L
+-DARDUINO_ARCH_AVR
+-DARDUINO=10805
+-D__AVR_ATmega2560__

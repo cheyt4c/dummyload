@@ -1,5 +1,4 @@
   // Libraries
-#include <Arduino.h>
 #include <Wire.h>                             // include I2C library
 #include <MCP79410_Timer.h>                   // Scullcom Hobby Electronics library  http://www.scullcom.com/MCP79410Timer-master.zip
 #include <Adafruit_MCP4725.h>                 // Adafruit DAC library  https://github.com/adafruit/Adafruit_MCP4725
@@ -10,11 +9,6 @@
 #include <Keypad.h>                           //http://playground.arduino.cc/Code/Keypad
 #include <SD.h>
 #include <SPI.h>
-
-
-#include <Adafruit_Sensor.h>
-#include <DHT.h>
-#include <DHT_U.h>
 
 // to change what is tested or not, change to a 0 (not tested) or 1 (tested)
 #define TEST_I2C 0 // reports what I2C addresses are active on the line
@@ -158,9 +152,9 @@ void inputValue (void);
 void userSetUp (void);
 
 // temp
-//void temperatureCutOff (void);
-//void getTemp();
-//void fanControl (void);
+void temperatureCutOff (void);
+void getTemp();
+void fanControl (void);
 void LoadSwitch();
 
 
@@ -178,68 +172,14 @@ void powerLevelCutOff (void);
 void maxConstantCurrentSetting (void);
 
 //SD card
-const int cs = 53;
-const char *WriteToLog = "log.txt";
-char buffer[100];
-char voltBuf[9], currBuf[9], powBuff[9], tempBuf[9];
-File OpenLogFile;
-unsigned long time, startTime, diff = 1000;
+const int CS = 53;
+const char *logTest = "log.txt";
 
-//DHT temperature and humidity sensor
-#define DHTPIN 2     // Digital pin connected to the DHT sensor
-// Feather HUZZAH ESP8266 note: use pins 3, 4, 5, 12, 13 or 14 --
-// Pin 15 can work but DHT must be disconnected during program upload.
 
-// Uncomment the type of sensor in use:
-//#define DHTTYPE    DHT11     // DHT 11
-#define DHTTYPE    DHT22     // DHT 22 (AM2302)
-//#define DHTTYPE    DHT21     // DHT 21 (AM2301)
-
-// See guide for details on sensor wiring and usage:
-//   https://learn.adafruit.com/dht/overview
-
-DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
 
   Serial.begin(9600);                                      //used for testing only
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
-  }
-
-  Serial.print("Initializing SD card...");
-
-  // see if the card is present and can be initialized:
-  if (!SD.begin(cs)) {
-    Serial.println("Card failed, or not present");
-  }
-  Serial.println("card initialized.");
-  //Start dht sensor
-  dht.begin();
-  // sensor_t sensor;
-  // dht.temperature().getSensor(&sensor);
-  // Serial.println(F("------------------------------------"));
-  // Serial.println(F("Temperature Sensor"));
-  // Serial.print  (F("Sensor Type: ")); Serial.println(sensor.name);
-  // Serial.print  (F("Driver Ver:  ")); Serial.println(sensor.version);
-  // Serial.print  (F("Unique ID:   ")); Serial.println(sensor.sensor_id);
-  // Serial.print  (F("Max Value:   ")); Serial.print(sensor.max_value); Serial.println(F("°C"));
-  // Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("°C"));
-  // Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("°C"));
-  // Serial.println(F("------------------------------------"));
-  // int check = SD.exists(WriteToLog);
-  // if ( check ) {
-  //   SD.remove(WriteToLog);
-  // }
-  OpenLogFile = SD.open(WriteToLog, FILE_WRITE);
-  if ( OpenLogFile ) {
-    OpenLogFile.println("--------------STARTING NEW SESSION--------------");
-    OpenLogFile.println("Voltage, Current, Power, Temperature, Time");
-    OpenLogFile.close();
-
-  setPower = 5;
-  reading = 5;
-  }
 
   Wire.begin();                                            //join i2c bus (address optional for master)
   Wire.setClock(400000L);                                  //sets bit rate to 400KHz
@@ -267,12 +207,12 @@ void setup() {
 
   lcd.setCursor(8,0);
   lcd.print("OFF");                                        //indicate that LOAD is off at start up
-  Power();                                               //sets initial mode to be CP (Constant Current) at Power Up
+  Current();                                               //sets initial mode to be CC (Constant Current) at Power Up
 
   customKey = customKeypad.getKey();
 
   // zeroOffset();
-  startTime = 0;
+
 }
 
 void loop() {
@@ -282,8 +222,8 @@ void loop() {
 
   lcd.setCursor(18,3);                                   //sets display of Mode indicator at bottom right of LCD
   lcd.print(Mode);                                       //display mode selected on LCD (CC, CP, CR or BC)
-  
-  //temperatureCutOff();                                   //check if Maximum Temperature is exceeded
+
+  temperatureCutOff();                                   //check if Maximum Temperature is exceeded
 
   if(Mode != "TC" && Mode != "TP" && Mode != "TT"){      //if NOT transient mode then Normal Operation
     // reading = encoderPosition/1000;                        //read input from rotary encoder
@@ -294,30 +234,11 @@ void loop() {
 
   readVoltageCurrent();                                  //routine for ADC's to read actual Voltage and Current
   ActualReading();                                       //Display actual Voltage, Current readings and Actual Wattage
-  time = millis();
-  if ( time - startTime > diff ) {
-    startTime = time;
-    float DHTTemp = dht.readTemperature();
-    dtostrf(ActualVoltage, 8, 3, voltBuf);
-    dtostrf(ActualCurrent, 8, 3, currBuf);
-    dtostrf(ActualPower, 8, 3, powBuff);
-    dtostrf(DHTTemp, 8, 3, tempBuf);
-
-    // dtostrf(readDHTTemp(), 8, 3, tempBuf);
-
-    sprintf(buffer,"%s,%s,%s,%s,%lu", voltBuf, currBuf, powBuff, tempBuf, time);
-    Serial.println(buffer);
-    OpenLogFile = SD.open(WriteToLog, FILE_WRITE);
-    if ( OpenLogFile ) {
-      OpenLogFile.println(buffer);
-      OpenLogFile.close();
-    }
-  }
 
   dacControl();
   dacControlVoltage();                                   //sets the drive voltage to control the MOSFET
 
- // fanControl();                                          //call heatsink fan control
+  fanControl();                                          //call heatsink fan control
 
 }
 
@@ -755,7 +676,6 @@ void displayEncoderReading (void) {
     //lcd.cursor();                                            //show cursor on LCD
 }
 //c_temp.ino
-/*
 void temperatureCutOff (void){
 
   getTemp(); // retrieve the temperature
@@ -786,8 +706,8 @@ void getTemp(){
   }
 
 }
-*/
-/*
+
+
 //-----------------------Fan Control----------------------------------------------------------
 void fanControl (void) {
 
@@ -807,7 +727,6 @@ void fanControl (void) {
       //analogWrite(PIN_FAN, fanSpeed);
   }
 
-*/
 /*
   if (temp >= 32  && temp < 40 ) {                     //Below 40 we run fan fixed at minimum
       fanSpeed = 131;
@@ -829,7 +748,7 @@ void fanControl (void) {
       fanSpeed = 255;
       digitalWrite(PIN_FAN, HIGH);
   }
-
+*/
   lcd.setCursor(16,0);
   lcd.print(temp);
   lcd.print((char)0xDF);
@@ -837,14 +756,8 @@ void fanControl (void) {
 
   //Serial.print("Fan Speed ");                      //used for testing only
   //Serial.println(fanSpeed);                        //used for testing only
-<<<<<<< HEAD
-=======
 
->>>>>>> b727321394a300a5b5d715189eb6c8fe30be706e
 }
-  */
-
-
 //d_ctrl.ino
 //-----------------------Select Constant Current LCD set up--------------------------------
 void Current(void) {
@@ -877,8 +790,7 @@ void Power(void) {
   lcd.setCursor(0,2);
   lcd.print("Set W = ");
   lcd.setCursor(16,2);
-  lcd.print("    "
-  );
+  lcd.print("    ");
   lcd.setCursor(14,2);
   lcd.print("W");
   lcd.setCursor(0,3);                                   //clear last line of time info
